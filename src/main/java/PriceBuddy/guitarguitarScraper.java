@@ -21,7 +21,7 @@ public class guitarguitarScraper {
 
     void scrape() throws Exception {
         //Loop for the pages
-        for (int page = 1; page <= 10; page++) {
+        for (int page = 1; page <= 1; page++) {
 
             //Download HTML document from website
             Document doc = Jsoup.connect("https://www.guitarguitar.co.uk/guitars/page-" + page + "/?Ordering=1&MinPrice=&MaxPrice=").get();
@@ -32,13 +32,14 @@ public class guitarguitarScraper {
 
             //Get all the products on the current page
             for (int i = 0; i <= 39; i++) {
-                Elements titleGuitar = guitarSection.get(i).select("strong");
+                Elements nameGuitar = guitarSection.get(i).select(".qa-product-list-item-title");
+                Elements brandGuitar = guitarSection.get(i).select("strong");
                 Elements priceGuitar = guitarSection.get(i).select("span.js-pounds");
 
                 String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
                 int price = Integer.parseInt(priceString);
 
-                System.out.println("Brands:" + titleGuitar.text() + "\nPrice:" + price);
+                System.out.println("Name: " + nameGuitar.text() + "\nBrands: " + brandGuitar.text() + "\nPrice: " + price);
 
             }
         }
