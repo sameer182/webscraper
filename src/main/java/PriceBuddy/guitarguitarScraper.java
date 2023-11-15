@@ -1,4 +1,4 @@
-package org.example;
+package PriceBuddy;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
