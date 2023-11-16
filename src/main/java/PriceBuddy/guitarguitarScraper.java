@@ -43,6 +43,7 @@ public class guitarguitarScraper {
                 int price = Integer.parseInt(priceString);
 
                 System.out.println("Name: " + nameGuitar.text() + "\nBrand: " + brandGuitar.text() + "\nPrice: " + price);
+                System.out.println("==========================");
 
             }
         }
