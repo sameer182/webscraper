@@ -18,7 +18,7 @@ public class guitarScraper1 {
 
     void scrape() throws Exception {
         //Loop for the pages
-        for (int page = 1; page <= 37; page++) {
+        for (int page = 1; page <= 1; page++) {
 
             // Connect to the URL and retrieve the HTML document
             Document doc = Jsoup.connect("https://www.guitar.co.uk/guitars/electric?p=" + page).get();
@@ -52,9 +52,10 @@ public class guitarScraper1 {
             }
         }
     }
-
-          public static void main (String[]args){
-
-            new guitarScraper1();
-        }
-    }
+}
+//
+//          public static void main (String[]args){
+//
+//            new guitarScraper1();
+//        }
+//    }
