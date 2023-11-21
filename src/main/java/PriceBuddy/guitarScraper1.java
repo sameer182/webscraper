@@ -1,13 +1,17 @@
 package PriceBuddy;
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+
+/** Example code to illustrate web scraping with JSoup */
 public class guitarScraper1 {
 
+    /**
+     * Constructor
+     */
     guitarScraper1() {
         try {
             scrape();
@@ -18,44 +22,33 @@ public class guitarScraper1 {
 
     void scrape() throws Exception {
         //Loop for the pages
-        for (int page = 1; page <= 1; page++) {
+        for (int page = 1; page <=1; page++) {
 
-            // Connect to the URL and retrieve the HTML document
-            Document doc = Jsoup.connect("https://www.guitar.co.uk/guitars/electric?p=" + page).get();
+            //Download HTML document from website
+            Document doc = Jsoup.connect("https://www.guitarguitar.co.uk/guitars/page-" + page + "/?Ordering=1&MinPrice=&MaxPrice=").get();
 
-            Elements mainContainer = doc.select("li.item");
+            //Get all the products on the page
+            Elements mainContainer = doc.select(".products");
+            Elements guitarSection = mainContainer.select(".product-inner");
 
-            //Go through each product container
-            for (Element productContainer : mainContainer) {
+            //Get all the products on the current page
+            for (int i = 0; i <=39; i++) {
+                Elements nameGuitar = guitarSection.get(i).select(".qa-product-list-item-title");
+                Elements brandGuitar = guitarSection.get(i).select("strong");
+                Elements priceGuitar = guitarSection.get(i).select("span.js-pounds");
 
-                Elements productNameElement = productContainer.select(".product-name");
-                Elements desGuitar = productContainer.select(".product-description");
-                Elements priceGuitar = productContainer.select(".regular-price .price, .special-price .price");
+                Element productLink = guitarSection.get(i).select(".qa-product-list-item-title").first();
 
-                // Extract the brand name from the first word of the product name which is title.
-                for (Element product : productNameElement) {
-                    String productName = product.select(".product-name").text();
-                    String[] words = productName.split("\\s+");
-                    if (words.length > 0) {
-                        String brand = words[0];
-                        String description = desGuitar.text();
+                String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
+                int price = Integer.parseInt(priceString);
 
-                        String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
-                        int price = Integer.parseInt(priceString) / 100;
+                System.out.println("Name: " + nameGuitar.text() + "\nBrand: " + brandGuitar.text() + "\nPrice: " + price);
+                System.out.println("==========================");
 
-                        //Print the details for each product
-                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nDescription :" + description + "\nPrice :" + price);
-                        System.out.println("===============================================================================");
-
-                    }
-                }
             }
         }
     }
+
 }
-//
-//          public static void main (String[]args){
-//
-//            new guitarScraper1();
-//        }
-//    }
+
+
