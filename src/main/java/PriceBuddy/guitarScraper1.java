@@ -21,28 +21,33 @@ public class guitarScraper1 {
         // Connect to the URL and retrieve the HTML document
         Document doc = Jsoup.connect("https://www.guitar.co.uk/guitars/electric").get();
 
-        Elements mainContainer = doc.select(".category-products");
+        Elements mainContainer = doc.select("li.item");
 
-          //Go through each product container
-          for (Element productContainer : mainContainer) {
-              Elements guitarSection = productContainer.select(".product-name a[title]");
-              Elements desGuitar = productContainer.select(".product-description");
+        //Go through each product container
+        for (Element productContainer : mainContainer) {
 
-              // Extract the brand name from the first word of the product name which is title.
-              for (Element product : guitarSection) {
-                  String productName = product.attr("title");
-                  String[] words = productName.split("\\s+");
-                  if (words.length > 0) {
-                      String brand = words[0];
-                      String description = desGuitar.text();
+            Elements productNameElement = productContainer.select(".product-name");
+            Elements desGuitar = productContainer.select(".product-description");
+            Elements priceGuitar = productContainer.select(".regular-price .price, .special-price .price");
 
-                      //Print the details for each product
-                      System.out.println("Name :" + productName + "\nBrand :" + brand + "\nDescription :" + description);
-                      System.out.println("===============================================================================");
-                  }
-              }
-          }
+           // Extract the brand name from the first word of the product name which is title.
+            for (Element product : productNameElement) {
+                String productName = product.select(".product-name").text();
+                String[] words = productName.split("\\s+");
+                if (words.length > 0) {
+                    String brand = words[0];
+                    String description = desGuitar.text();
 
+                    String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
+                    int price = Integer.parseInt(priceString) / 100;
+
+                    //Print the details for each product
+                    System.out.println("Name :" + productName + "\nBrand :" + brand + "\nDescription :" + description + "\nPrice :" + price);
+                    System.out.println("===============================================================================");
+
+                }
+            }
+        }
     }
           public static void main (String[]args){
 
