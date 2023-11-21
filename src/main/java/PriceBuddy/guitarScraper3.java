@@ -17,22 +17,28 @@ public class guitarScraper3 {
 
     void scrape() throws Exception {
 
-        //Connect to the URL and retrieve the HTML document
-     Document doc = Jsoup.connect("https://www.gak.co.uk/en/electric-guitars")
-             .userAgent("Google Chrome - Computer Science Student - Webscraping Coursework Project").get();
+        //Loop for the pages
+        for (int page = 1; page <= 2; page++) {
 
-     Elements mainContainer = doc.select(".product-card");
+            //Connect to the URL and retrieve the HTML document
+            Document doc = Jsoup.connect("https://www.gak.co.uk/en/electric-guitars?page=" + page + "&stockonly=true&min=99&max=10349")
+                    .userAgent("Google Chrome - Computer Science Student - Webscraping Coursework Project").get();
 
-     //Go through each products
-     for (Element productContainer : mainContainer) {
+            Elements mainContainer = doc.select(".product-card");
 
-         Elements guitarName = productContainer.select(".product-card .clamp.title");
-         Elements guitarDes = productContainer.select(".product-card .clamp.teaser");
-         System.out.println("Name :" + guitarName.text() + "\nDescription :" + guitarDes.text());
-         System.out.println("===========================================");
+            //Go through each products
+            for (Element productContainer : mainContainer) {
 
-     }
+                Elements guitarName = productContainer.select(".clamp.title");
+                // Extract the brand name
+                String brandName = productContainer.attr("data-brand");
+                Elements guitarDes = productContainer.select(".clamp.teaser");
+                System.out.println("Name :" + guitarName.text() + "\nBrand :" + brandName + "\nDescription :" + guitarDes.text());
+                System.out.println("===========================================");
 
+
+            }
+        }
 
 
 }
