@@ -27,7 +27,7 @@ public class guitarScraper3 {
 
             Elements mainContainer = doc.select(".product-card");
 
-            //Go through each products
+            //Go through each product
             for (Element productContainer : mainContainer) {
                 //Get the product title
                 Elements guitarName = productContainer.select(".clamp.title");
@@ -53,8 +53,8 @@ public class guitarScraper3 {
                 String url = guitarUrl.attr("href");
 
 
-                System.out.println("Name :" + guitarName.text() + "\nBrand :" + brandName + "\nDescription :" + guitarDes.text() +
-                                   "\nPrice :" + price + "\nPic :" + pic + "\nURL :" + url);
+                System.out.println("Name :" + guitarName.text() + "\nBrand :" + brandName + "\nPrice :" + price +
+                        "\nDescription :" + guitarDes.text() + "\nPic :" + pic + "\nURL :" + url);
                 System.out.println("================================================================");
 
 
