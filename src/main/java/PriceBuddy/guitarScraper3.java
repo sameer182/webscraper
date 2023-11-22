@@ -5,6 +5,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+
 public class guitarScraper3 {
 
     guitarScraper3() {
@@ -28,13 +29,33 @@ public class guitarScraper3 {
 
             //Go through each products
             for (Element productContainer : mainContainer) {
-
+                //Get the product title
                 Elements guitarName = productContainer.select(".clamp.title");
-                // Extract the brand name
+                //Extract the brand name
                 String brandName = productContainer.attr("data-brand");
+                //Get the product description
                 Elements guitarDes = productContainer.select(".clamp.teaser");
-                System.out.println("Name :" + guitarName.text() + "\nBrand :" + brandName + "\nDescription :" + guitarDes.text());
-                System.out.println("===========================================");
+
+                //Get the product price
+                Elements guitarPrice = productContainer.select(".bold .d-price");
+                //Prints the first price when there are two
+                String priceString1 = guitarPrice.first().text();
+                //Remove all the non-numerical digits
+                String priceString2 = priceString1.replaceAll("[^0-9]", "");
+                int price = Integer.parseInt(priceString2)/100;
+
+                //Get the product picture
+                Elements guitarPic = productContainer.select(".product--image");
+                String pic = guitarPic.attr("src");
+
+                //Get the product URL
+                Elements guitarUrl = productContainer.select(".product-card");
+                String url = guitarUrl.attr("href");
+
+
+                System.out.println("Name :" + guitarName.text() + "\nBrand :" + brandName + "\nDescription :" + guitarDes.text() +
+                                   "\nPrice :" + price + "\nPic :" + pic + "\nURL :" + url);
+                System.out.println("================================================================");
 
 
             }
