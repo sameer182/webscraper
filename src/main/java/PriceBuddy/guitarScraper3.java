@@ -29,12 +29,10 @@ public class guitarScraper3 {
 
             //Go through each product
             for (Element productContainer : mainContainer) {
-                //Get the product title
+                //Get the product name
                 Elements guitarName = productContainer.select(".clamp.title");
                 //Extract the brand name
                 String brandName = productContainer.attr("data-brand");
-                //Get the product description
-                Elements guitarDes = productContainer.select(".clamp.teaser");
 
                 //Get the product price
                 Elements guitarPrice = productContainer.select(".bold .d-price");
@@ -43,6 +41,9 @@ public class guitarScraper3 {
                 //Remove all the non-numerical digits
                 String priceString2 = priceString1.replaceAll("[^0-9]", "");
                 int price = Integer.parseInt(priceString2)/100;
+
+                //Get the product description
+                Elements guitarDes = productContainer.select(".clamp.teaser");
 
                 //Get the product picture
                 Elements guitarPic = productContainer.select(".product--image");

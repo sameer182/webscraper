@@ -27,9 +27,11 @@ public class guitarScraper2 {
 
             //Go through each product container
             for (Element productContainer : mainContainer) {
-
+                //Get the product name
                 Elements productNameElement = productContainer.select(".product-name");
+                //Get the product description
                 Elements desGuitar = productContainer.select(".product-description");
+                //Get the product price
                 Elements priceGuitar = productContainer.select(".regular-price .price, .special-price .price");
 
                 // Extract the brand name from the first word of the product name which is title.
@@ -40,11 +42,23 @@ public class guitarScraper2 {
                         String brand = words[0];
                         String description = desGuitar.text();
 
+                        //Remove all the non-numerical digit
                         String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
                         int price = Integer.parseInt(priceString) / 100;
 
+
+                        //Get the product picture
+//                        Elements guitarPic = productContainer.select(".product-image");
+//                        String pic = guitarPic.attr("src");
+//                        System.out.println(pic);
+
+                        //Get the product URL
+//                        Elements guitarUrl = productContainer.select(".item.first a");
+//                        String url = guitarUrl.attr("href");
+//                        System.out.println(url);
+
                         //Print the details for each product
-                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nDescription :" + description + "\nPrice :" + price);
+                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nPrice :" + price + "\nDescription :" + description);
                         System.out.println("===============================================================================");
 
                     }
@@ -52,10 +66,9 @@ public class guitarScraper2 {
             }
         }
     }
-}
-//
-//          public static void main (String[]args){
-//
-//            new guitarScraper1();
-//        }
-//    }
+
+          public static void main (String[]args){
+
+            new guitarScraper2();
+        }
+    }

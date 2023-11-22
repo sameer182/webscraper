@@ -38,13 +38,14 @@ public class guitarScraper4 {
                     if (words.length > 0) {
                         String brand = words[0];
 
-                        //Get the product description
-                        Elements guitarDes = productContainer.select(".summary, hide-grid");
                         //Get the product price
                         Elements guitarPrice = productContainer.select(".price--withTax");
                         //Remove all the non-numerical digit
                         String priceString = guitarPrice.text().replaceAll("[^0-9]", "");
                         int price = Integer.parseInt(priceString) / 100;
+
+                        //Get the product description
+                        Elements guitarDes = productContainer.select(".summary, hide-grid");
 
                         //Get the product picture
                         Elements guitarPic = productContainer.select(".card-img-container img");
