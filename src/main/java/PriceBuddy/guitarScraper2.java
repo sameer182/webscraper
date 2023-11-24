@@ -48,17 +48,17 @@ public class guitarScraper2 {
 
 
                         //Get the product picture
-//                        Elements guitarPic = productContainer.select(".product-image");
-//                        String pic = guitarPic.attr("src");
-//                        System.out.println(pic);
+                        Elements guitarPic = productContainer.select(".item img");
+                        String pic = guitarPic.attr("src");
 
                         //Get the product URL
-//                        Elements guitarUrl = productContainer.select(".item.first a");
-//                        String url = guitarUrl.attr("href");
-//                        System.out.println(url);
+                        Elements guitarUrl = productContainer.select(".item a");
+                        String url = guitarUrl.attr("href");
+
 
                         //Print the details for each product
-                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nPrice :" + price + "\nDescription :" + description);
+                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nPrice :" + price + "\nDescription :" + description +
+                                           "\nPic :" + pic + "\nURL :" + url);
                         System.out.println("===============================================================================");
 
                     }

@@ -29,20 +29,26 @@ public class guitarScraper1 {
 
             //Get all the products on the page
             Elements mainContainer = doc.select(".products");
-            Elements guitarSection = mainContainer.select(".product-inner");
 
-            //Get all the products on the current page
-            for (int i = 0; i <=39; i++) {
-                Elements nameGuitar = guitarSection.get(i).select(".qa-product-list-item-title");
-                Elements brandGuitar = guitarSection.get(i).select("strong");
-                Elements priceGuitar = guitarSection.get(i).select("span.js-pounds");
+            //Go through each product
+            for (Element guitarSection : mainContainer.select(".product-inner")){
+                //Get the product name
+                Elements guitarName = guitarSection.select(".qa-product-list-item-title");
+                //Get the guitar brand
+                Elements brandGuitar = guitarSection.select("strong");
 
-                Element productLink = guitarSection.get(i).select(".qa-product-list-item-title").first();
-
+                //Get the guitar price
+                Elements priceGuitar = guitarSection.select("span.js-pounds");
+                //Remove all the non-numerical digit
                 String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
                 int price = Integer.parseInt(priceString);
 
-                System.out.println("Name: " + nameGuitar.text() + "\nBrand: " + brandGuitar.text() + "\nPrice: " + price);
+                //Get the product description
+//                Elements guitarPic = mainContainer.select(".js-picture-lazy img");
+//                String pic = guitarPic.attr("data-src");
+//                System.out.println(pic);
+
+                System.out.println("Name: " + guitarName.text() + "\nBrand: " + brandGuitar.text() + "\nPrice: " + price);
                 System.out.println("==========================");
 
             }
