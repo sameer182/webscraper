@@ -6,20 +6,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 
-public class guitarScraper3 {
+public class    guitarScraper3 {
+
+    guitarDao dao;
 
     guitarScraper3() {
-        try {
-            scrape();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        dao = new guitarDao();
+        dao.init();
     }
 
     void scrape() throws Exception {
 
         //Loop for the pages
-        for (int page = 1; page <= 2; page++) {
+        for (int page = 1; page <= 1; page++) {
 
             //Connect to the URL and retrieve the HTML document
             Document doc = Jsoup.connect("https://www.gak.co.uk/en/electric-guitars?page=" + page + "&stockonly=true&min=99&max=10349")
@@ -40,10 +39,17 @@ public class guitarScraper3 {
                 String priceString1 = guitarPrice.first().text();
                 //Remove all the non-numerical digits
                 String priceString2 = priceString1.replaceAll("[^0-9]", "");
-                int price = Integer.parseInt(priceString2)/100;
+                int price = Integer.parseInt(priceString2) / 100;
 
                 //Get the product description
                 Elements guitarDes = productContainer.select(".clamp.teaser");
+                String description = guitarDes.text();
+                //Checks if the description field is empty or not
+                if(description.isEmpty()) {
+                    description = "No description.";
+                } else {
+                   description = guitarDes.text();
+                }
 
                 //Get the product picture
                 Elements guitarPic = productContainer.select(".product--image");
@@ -54,19 +60,33 @@ public class guitarScraper3 {
                 String url = guitarUrl.attr("href");
 
 
-                System.out.println("Name :" + guitarName.text() + "\nBrand :" + brandName + "\nPrice :" + price +
-                        "\nDescription :" + guitarDes.text() + "\nPic :" + pic + "\nURL :" + url);
-                System.out.println("================================================================");
+//                System.out.println("Name :" + guitarName.text() + "\nBrand :" + brandName + "\nPrice :" + price +
+//                        "\nDescription :" + guitarDes.text() + "\nPic :" + pic + "\nURL :" + url);
+//                System.out.println("================================================================");
 
+                //Create guitar class with data
+                guitar g3 = new guitar();
+                g3.setName(guitarName.text());//From web scraping
+                g3.setBrands(brandName);//From web scraping
+                g3.setDescription(description);//From web scraping
 
+                try {
+                    //Save data without checking for duplicates
+                    dao.simpleSave(g3);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
         }
+    }
 
-
-}
-public static void main (String[] args){
-
-    new guitarScraper3();
-
-}
+//public static void main (String[] args){
+//
+//    guitarScraper3 scraper = new guitarScraper3();
+//    try {
+//        scraper.scrape();
+//    } catch (Exception e) {
+//        throw new RuntimeException(e);
+//    }
+//}
 }

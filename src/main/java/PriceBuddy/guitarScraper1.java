@@ -43,13 +43,13 @@ public class guitarScraper1 {
                 String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
                 int price = Integer.parseInt(priceString);
 
-                //Get the product description
-//                Elements guitarPic = mainContainer.select(".js-picture-lazy img");
-//                String pic = guitarPic.attr("data-src");
-//                System.out.println(pic);
+                //Get the product pic
+                Elements guitarPic = mainContainer.select(".js-picture-lazy img");
+                String pic = guitarPic.attr("data-src");
+                System.out.println(pic);
 
-                System.out.println("Name: " + guitarName.text() + "\nBrand: " + brandGuitar.text() + "\nPrice: " + price);
-                System.out.println("==========================");
+//                System.out.println("Name: " + guitarName.text() + "\nBrand: " + brandGuitar.text() + "\nPrice: " + price);
+//                System.out.println("==========================");
 
             }
 

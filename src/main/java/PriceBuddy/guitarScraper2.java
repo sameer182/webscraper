@@ -6,17 +6,17 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+
 public class guitarScraper2 {
 
+    guitarDao dao;
+
     guitarScraper2() {
-        try {
-            scrape();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        dao = new guitarDao();
+        dao.init();
     }
 
-    void scrape() throws Exception {
+    public void scrape() throws Exception {
         //Loop for the pages
         for (int page = 1; page <= 1; page++) {
 
@@ -56,19 +56,29 @@ public class guitarScraper2 {
                         String url = guitarUrl.attr("href");
 
 
-                        //Print the details for each product
-                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nPrice :" + price + "\nDescription :" + description +
-                                           "\nPic :" + pic + "\nURL :" + url);
-                        System.out.println("===============================================================================");
+//                        //Print the details for each product
+//                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nPrice :" + price + "\nDescription :" + description +
+//                                           "\nPic :" + pic + "\nURL :" + url);
+//                        System.out.println("===============================================================================");
+
+                        //Create guitar class with data
+                        guitar g2 = new guitar();
+                        g2.setName(productName);//From web scraping
+                        g2.setBrands(brand);//From web scraping
+                        g2.setDescription(description);
+
+
+                        try{
+                            //Save data without checking for duplicates
+                            dao.simpleSave(g2);
+                        }
+                        catch(Exception ex){
+                            ex.printStackTrace();
+                        }
 
                     }
                 }
             }
         }
     }
-
-          public static void main (String[]args){
-
-            new guitarScraper2();
-        }
     }
