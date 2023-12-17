@@ -22,6 +22,7 @@
 
         <!-- Mapping files -->
         <mapping class="PriceBuddy.guitar"/>
+        <mapping class="PriceBuddy.comparison"/>
 
 
     </session-factory>

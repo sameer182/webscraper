@@ -1,84 +1,114 @@
 package PriceBuddy;
 
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 
-public class guitarScraper2 {
 
-    guitarDao dao;
+/** Example code to illustrate web scraping with JSoup */
+public class GuitarScraper2 {
 
-    guitarScraper2() {
-        dao = new guitarDao();
-        dao.init();
+    /**
+     * Constructor
+     */
+
+    private guitarDao dao;
+
+    public GuitarScraper2(guitarDao dao) {
+        this.dao = dao;
     }
 
-    public void scrape() throws Exception {
+
+    void scrape() throws IOException {
         //Loop for the pages
-        for (int page = 1; page <= 1; page++) {
+        for (int page = 1; page <= 20; page++) {
 
-            // Connect to the URL and retrieve the HTML document
-            Document doc = Jsoup.connect("https://www.guitar.co.uk/guitars/electric?p=" + page).get();
+            //Download HTML document from website
+            Document doc = Jsoup.connect("https://www.guitarguitar.co.uk/guitars/electric/page-" + page + "/?Ordering=1&MinPrice=&MaxPrice=")
+                    .userAgent("Google Chrome - Computer Science Student - Webscraping Coursework Project").get();
 
-            Elements mainContainer = doc.select("li.item");
+            //Get all the products on the page
+//            Elements mainContainer = doc.select(".products");
+            Elements mainContainer = doc.select(".product-list-products");
 
-            //Go through each product container
-            for (Element productContainer : mainContainer) {
+            //Go through each product
+            for (Element productSection : mainContainer.select(".product")) {
+
+                Elements guitarSection = productSection.select(".product-inner");
+
                 //Get the product name
-                Elements productNameElement = productContainer.select(".product-name");
-                //Get the product description
-                Elements desGuitar = productContainer.select(".product-description");
-                //Get the product price
-                Elements priceGuitar = productContainer.select(".regular-price .price, .special-price .price");
+                Elements guitarName = guitarSection.select(".qa-product-list-item-title");
 
-                // Extract the brand name from the first word of the product name which is title.
-                for (Element product : productNameElement) {
-                    String productName = product.select(".product-name").text();
-                    String[] words = productName.split("\\s+");
-                    if (words.length > 0) {
-                        String brand = words[0];
-                        String description = desGuitar.text();
+                //Get the guitar brand
+                Elements brandGuitar = guitarSection.select("strong");
 
-                        //Remove all the non-numerical digit
-                        String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
-                        int price = Integer.parseInt(priceString) / 100;
+                //Get the guitar price
+                Elements priceGuitar = guitarSection.select("span.js-pounds");
+                //Remove all the non-numerical digit
+                String priceString = priceGuitar.text().replaceAll("[^0-9]", "");
+                int price = Integer.parseInt(priceString);
 
+                //Get the product pic
+                Elements guitarPic = guitarSection.select(".js-picture-lazy img");
+                String pic = guitarPic.attr("data-src");
 
-                        //Get the product picture
-                        Elements guitarPic = productContainer.select(".item img");
-                        String pic = guitarPic.attr("src");
+                //Get the guitar link and manually adding the base URL
+                Elements productLinks = productSection.select("a");
+                String url = "https://www.guitarguitar.co.uk" + productLinks.attr("href");
 
-                        //Get the product URL
-                        Elements guitarUrl = productContainer.select(".item a");
-                        String url = guitarUrl.attr("href");
+                //Get the guitar model from inside the product URL§
+                String model = scrapeModel(url);
 
 
-//                        //Print the details for each product
-//                        System.out.println("Name :" + productName + "\nBrand :" + brand + "\nPrice :" + price + "\nDescription :" + description +
-//                                           "\nPic :" + pic + "\nURL :" + url);
-//                        System.out.println("===============================================================================");
+                //Get the guitar description from inside the product URL
+                String description = scrapeDescription(url);
 
-                        //Create guitar class with data
-                        guitar g2 = new guitar();
-                        g2.setName(productName);//From web scraping
-                        g2.setBrands(brand);//From web scraping
-                        g2.setDescription(description);
+                // Create guitar class with data
+                guitar g2 = new guitar();
+                g2.setName(guitarName.text());
+                g2.setBrands(brandGuitar.text());
+                g2.setModel(model);
+                g2.setDescription(description);
+                g2.setPic(pic);
 
+                // Create comparison class with data
+                comparison g2Comparison = new comparison();
+                g2Comparison.setGuitar(g2);
+                g2Comparison.setPrice(price);
+                g2Comparison.setUrl(url);
 
-                        try{
-                            //Save data without checking for duplicates
-                            dao.simpleSave(g2);
-                        }
-                        catch(Exception ex){
-                            ex.printStackTrace();
-                        }
-
-                    }
+                try {
+                    // Save the comparison
+                    dao.saveAndMergeGuitar(g2, price, url);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
+
             }
         }
     }
+
+    //Scrape the guitar model from inside the product URL
+    String scrapeModel(String url) throws IOException {
+        Document productPage = Jsoup.connect(url).get();
+        Element modelElement = productPage.select(".description-full > p strong").first();
+        return modelElement != null ? modelElement.text().replace("Manufacturer's ID:", "").replaceAll("-", "")
+                .replaceAll("_", "").toLowerCase() : "No model number.";
+
     }
+
+    //Scrape the guitar description from inside the product URL
+    String scrapeDescription(String url) throws IOException {
+        Document productPage = Jsoup.connect(url).get();
+        Element descriptionElement = productPage.select(".original-description p").first();
+        return descriptionElement != null ? descriptionElement.text() : "No Description.";
+    }
+
+
+
+}
+
+
