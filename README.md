@@ -1,5 +1,10 @@
 # PRICE BUDDY
 
-Price comparison website with web scraping.
+Guitar Price comparison website with Jsoup web scraping.
+> Hibernate
+> Spring Boot
 
-Working on my webscraper project.
+## Link to the front-end repo
+```
+> https://github.com/sameer182/price-buddy
+```
